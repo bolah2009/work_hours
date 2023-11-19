@@ -1,0 +1,12 @@
+<%= tag.article id: "#{type}_notice", class: %w(text-xs sm:text-sm text-authMidGray) do %>
+  <% if notice.present? %>
+    <h4><%= notice %></h4>
+    <% if errors.present? %>
+      <ul>
+        <% errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+<% end %>

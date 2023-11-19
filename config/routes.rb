@@ -5,6 +5,12 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get 'up' => 'rails/health#show', as: :rails_health_check
 
+  resources 'users', only: %i[new create show update edit]
+
+  get 'sign_in', to: 'sessions#new'
+  post 'sign_in', to: 'sessions#create'
+  get 'logout', to: 'sessions#destroy', as: :logout
+
   # Defines the root path route ("/")
-  # root "posts#index"
+  root 'users#show'
 end

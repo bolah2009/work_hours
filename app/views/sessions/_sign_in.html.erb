@@ -1,0 +1,22 @@
+<%= turbo_frame_tag "sign-in", class: "#{@show_frame == :sign_in ? 'flex' : 'hidden'} sign-in pt-10 bg-authLink w-full text-white h-screen flex-col items-center justify-items-stretch", data: { 'turbo-action': :advance } do %>
+  <%= image_tag "work_hours_logo.png", class: "mb-2 w-9" %>
+  <h1 class="font-authLightGray text-base mb-40">Welcome back to WorkHours.</h1>
+  <%= form_with url: sign_in_path, class: "w-11/12 md:w-6/12 xl:w-4/12" do |form| %>
+    <div class="bg-white text-black rounded-2xl p-6 flex flex-col">
+      <h3 class="font-bold text-authDarkGray text-2xl mb-3">Enter your email and password</h3>
+      <p style="color: red"><%= alert %></p>
+      <%= form.label :email, for: "sign_in_email", class: "flex justify-between items-center border-0 border-b mb-3" do %>
+        <span class="font-bold text-authDarkGray">E-mail</span>
+        <%= form.email_field :email, id: "sign_in_email", required: true, autocomplete: "email",  data: { action: "focus->authenticate#focus blur->authenticate#blur"}, class: "form-input border-0 focus:ring-0 w-9/12" %>
+      <% end %>
+      <%= form.label :password, for: "sign_in_password", class: "flex justify-between items-center border-0 border-b mb-3" do %>
+        <span class="font-bold text-authDarkGray">Password</span>
+        <%= form.password_field :password, id: "sign_in_password",required: true, autocomplete: "current-password",  data: { action: "focus->authenticate#focus blur->authenticate#blur"}, class: "form-input border-0 focus:ring-0 w-9/12" %>
+      <% end %>
+      <div class="flex justify-between mt-20">
+        <button type="button" data-action="authenticate#navigate" data-target-page="home" data-current-page="sign-in" class="bg-white p-2 w-1/4 rounded-full text-authMidGray font-semibold border border-authLightGray">go back</button>
+        <button type="submit" data-turbo-frame="_top" data-target-page="name-and-details" data-current-page="email-password" class="bg-authLink p-2 w-1/4 rounded-full text-white font-semibold">Continue</button>
+      </div>
+    </div>
+  <% end %>
+<% end %>

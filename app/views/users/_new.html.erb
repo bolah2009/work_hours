@@ -1,0 +1,5 @@
+<%= turbo_frame_tag "sign-up", class: "#{@show_frame == :sign_up ? 'flex' : 'hidden'} sign-up pt-10 bg-authLink w-full text-white h-screen flex-col items-center justify-items-stretch", data: { 'turbo-action': :advance } do %>
+  <%= image_tag "work_hours_logo.png", class: "mb-2 w-9" %>
+  <h1 class="font-authLightGray text-base mb-40">Welcome to WorkHours.</h1>
+  <%= render "users/form", user: @user %>
+<% end %>

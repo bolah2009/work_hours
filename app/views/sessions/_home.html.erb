@@ -1,0 +1,13 @@
+<div class="<%= @show_frame ? 'hidden' : 'flex' %> home px-5 bg-authLink w-full text-white h-screen flex-col items-center justify-items-stretch">
+  <div class="h-[20vh]"></div>
+  <%= image_tag "work_hours_logo.png", class: "mb-6" %>
+  <h1 class="font-semibold text-xl sm:text-3xl mb-6">To start a new WorkHours, please identify.</h1>
+  <p class="font-authLightGray text-sm">WorkHours is free to use and values your privacy.</p>
+  <p class="font-authLightGray text-sm  mb-12">Please choose your prefered authentication method.</p>
+  <button type="button" class="bg-authBlue p-1 w-44 rounded-full mb-4 font-authLightGray" data-action="authenticate#navigate" data-target-page="sign-in" data-current-page="home">Sign in</button>
+  <button type="button" class="bg-white p-1 w-44 rounded-full mb-4 text-black font-authLightGray" data-action="authenticate#navigate" data-target-page="sign-up" data-current-page="home">Sign up</button>
+  <div class="h-[20vh]"></div>
+  <footer>
+    <p class="font-authLightGray text-sm">By using WorkHours, you agree to our humble terms & conditions.</p>
+  </footer>
+</div>

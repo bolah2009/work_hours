@@ -1,0 +1,6 @@
+<%= turbo_frame_tag "main", class: "authenticate w-full", data: { controller: :authenticate, 'turbo-action': :advance } do %>
+  <%= render "home" %>
+  <%= render "users/new" %>
+  <%= render "sign_in" %>
+  <%= render partial: 'shared/notice' %>
+<% end %>
