@@ -4,6 +4,8 @@ class UsersController < ApplicationController
   before_action :set_user,
                 only: %i[edit update]
   before_action :prevent_registrations, only: %i[new create]
+  before_action :set_organization,
+                only: %i[show]
 
   # GET /users/1
   def show; end
@@ -60,6 +62,11 @@ class UsersController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_user
     @user = User.find(params[:id])
+  end
+
+  def set_organization
+    @organization = Organization.find_by(id: session[:current_organization_id])
+    redirect_to root_path if @organization.blank?
   end
 
   # Only allow a list of trusted parameters through.

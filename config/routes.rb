@@ -11,6 +11,10 @@ Rails.application.routes.draw do
   post 'sign_in', to: 'sessions#create'
   get 'logout', to: 'sessions#destroy', as: :logout
 
+  resources :organizations, only: %i[new create index show]
+
+  patch 'password', to: 'passwords#update', as: :edit_password
+
   # Defines the root path route ("/")
-  root 'users#show'
+  root 'organizations#index'
 end

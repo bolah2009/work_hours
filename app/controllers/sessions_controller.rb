@@ -21,6 +21,7 @@ class SessionsController < ApplicationController
 
   def destroy
     session.delete(:current_user_id)
+    session.delete(:current_organization_id)
     @current_user = nil
     redirect_to sign_in_path, notice: 'Logged out', notice_type: :info, status: :see_other
   end

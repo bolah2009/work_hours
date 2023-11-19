@@ -10,9 +10,52 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_19_081957) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_19_102606) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "invitations", force: :cascade do |t|
+    t.bigint "sender_id", null: false
+    t.bigint "recipient_id", null: false
+    t.bigint "organization_id", null: false
+    t.bigint "role_id", null: false
+    t.string "token", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_invitations_on_organization_id"
+    t.index ["recipient_id"], name: "index_invitations_on_recipient_id"
+    t.index ["role_id"], name: "index_invitations_on_role_id"
+    t.index ["sender_id"], name: "index_invitations_on_sender_id"
+    t.index ["token"], name: "index_invitations_on_token", unique: true
+  end
+
+  create_table "memberships", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "organization_id", null: false
+    t.bigint "role_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id", "user_id"], name: "index_memberships_on_organization_id_and_user_id"
+    t.index ["organization_id"], name: "index_memberships_on_organization_id"
+    t.index ["role_id", "user_id"], name: "index_memberships_on_role_id_and_user_id"
+    t.index ["role_id"], name: "index_memberships_on_role_id"
+    t.index ["user_id"], name: "index_memberships_on_user_id"
+  end
+
+  create_table "organizations", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_organizations_on_name", unique: true
+  end
+
+  create_table "roles", force: :cascade do |t|
+    t.string "name"
+    t.jsonb "privileges", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_roles_on_name", unique: true
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", limit: 100
@@ -23,4 +66,11 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_19_081957) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "invitations", "organizations"
+  add_foreign_key "invitations", "roles"
+  add_foreign_key "invitations", "users", column: "recipient_id"
+  add_foreign_key "invitations", "users", column: "sender_id"
+  add_foreign_key "memberships", "organizations"
+  add_foreign_key "memberships", "roles"
+  add_foreign_key "memberships", "users"
 end

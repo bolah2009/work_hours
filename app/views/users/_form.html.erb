@@ -25,7 +25,6 @@
     <%= form.label :password, class: "flex justify-between items-center border-0 border-b mb-3" do %>
       <span class="font-bold text-authDarkGray">Password</span>
       <%= form.password_field :password, required: true,
-               pattern: "^(?=.*\d)(?=.*[a-zA-Z])(?=.*\W).{8,50}$",
                title: "Password must be 8 to 50 characters long, contain at least one number, one letter, and one symbol.",
                minlength: "8",
                maxlength: "50",
