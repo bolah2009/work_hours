@@ -1,0 +1,14 @@
+---
+glob: '**/*.{html,text,js}{+*,}.erb'
+exclude:
+  - '**/vendor/**/*'
+  - '**/node_modules/**/*'
+linters:
+  ErbSafety:
+    enabled: true
+  Rubocop:
+    enabled: true
+    rubocop_config:
+      inherit_from: .erb-lint_rubocop.yml
+      AllCops:
+        DisabledByDefault: true

@@ -1,0 +1,102 @@
+name: QA
+
+on: [push, pull_request]
+
+env:
+  FORCE_COLOR: 1
+
+jobs:
+  js-lint:
+    runs-on: ubuntu-22.04
+    name: Linter Checks for all Js, Json, yaml files
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          # cache: 'yarn'
+      - name: Install required dependency for node
+        run: |
+          yarn install
+      - name: Run ESLint
+        run: |
+          yarn eslint:check
+      - name: Run Stylelint
+        run: |
+          yarn stylelint:check
+      - name: Run Prettier
+        run: |
+          yarn format:check
+
+  ruby-lint:
+    name: Linter Checks for Ruby and ERB files
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Setup Rubocop
+        run: bundle install
+      - name: Rubocop Report
+        run: bundle exec rubocop
+      - name: Erblint Report
+        run: bundle exec erblint --lint-all
+
+  security:
+    name: Check Security
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Setup Brakeman and Bundler Audit
+        run: bundle install
+      - name: Brakeman Report
+        run: bundle exec brakeman -z
+      - name: Bundler Audit Report
+        run: |
+          bundle exec bundle-audit update
+          bundle exec bundle-audit check
+
+  rspec:
+    name: RSpec
+    runs-on: ubuntu-22.04
+
+    services:
+      postgres:
+        image: postgres:11.6-alpine
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Setup RSpec
+        run: bundle install
+      - name: RSpec Report
+        env:
+          # The hostname used to communicate with the PostgreSQL service container
+          POSTGRES_HOST: localhost
+          # The default PostgreSQL port
+          POSTGRES_PORT: 5432
+          POSTGRES_PASSWORD: postgres
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+          RAILS_ENV: test
+          DATABASE_URL: 'postgres://postgres@localhost:5432/migra_test'
+        run: |
+          bundle install
+          RAILS_ENV=test bundle exec rails db:create
+          RAILS_ENV=test bundle exec rails db:schema:load 
+          RAILS_ENV=test bundle exec rails assets:precompile
+          RAILS_ENV=test bundle exec rspec --force-color --format documentation
