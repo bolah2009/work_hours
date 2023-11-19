@@ -22,8 +22,15 @@ Metrics/MethodLength:
 Rails/I18nLocaleTexts:
   Enabled: false
 
+Rails/Output:
+  Exclude:
+    - 'db/seeds.rb'
+
 RSpec/NestedGroups:
   Max: 5
+
+RSpec/MultipleMemoizedHelpers:
+  Max: 10
 
 Style/Documentation:
   Enabled: false

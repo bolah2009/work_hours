@@ -16,7 +16,10 @@ class PasswordsController < ApplicationController
           assigns: { type: :user_password, errors: current_user.errors, notice:, notice_type: }
         )
       end
-      format.html { redirect_to user_path(current_user), errors: current_user.errors, notice:, notice_type: }
+      format.html do
+        redirect_to organization_user_path(organization_id, current_user), errors: current_user.errors, notice:,
+                                                                           notice_type:
+      end
     end
   end
 

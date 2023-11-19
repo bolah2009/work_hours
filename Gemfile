@@ -23,9 +23,6 @@ gem 'turbo-rails'
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem 'stimulus-rails'
 
-# Use Tailwind CSS [https://github.com/rails/tailwindcss-rails]
-gem 'tailwindcss-rails'
-
 # Use Redis adapter to run Action Cable in production
 gem 'redis'
 
@@ -33,24 +30,29 @@ gem 'redis'
 gem 'bcrypt'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: %i[windows jruby]
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', require: false
 
+# CSS library
+gem 'tailwindcss-rails'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem 'debug', platforms: %i[mri windows]
+  gem 'debug', platforms: %i[mri mingw x64_mingw], require: false
 
   # code QA
   gem 'brakeman', require: false
-  gem 'erb_lint'
-  gem 'rubocop'
-  gem 'rubocop-faker'
-  gem 'rubocop-performance'
-  gem 'rubocop-rails'
-  gem 'rubocop-rspec'
-  gem 'standard'
+  gem 'bundle-audit', require: false
+  gem 'erb_lint', require: false
+  gem 'rubocop', require: false
+  gem 'rubocop-faker', require: false
+  gem 'rubocop-performance', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
+  gem 'standard', require: false
+
   # test frameworks
   gem 'factory_bot_rails'
   gem 'faker'

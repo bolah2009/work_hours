@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_19_102606) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_19_152112) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,21 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_19_102606) do
     t.index ["role_id", "user_id"], name: "index_memberships_on_role_id_and_user_id"
     t.index ["role_id"], name: "index_memberships_on_role_id"
     t.index ["user_id"], name: "index_memberships_on_user_id"
+  end
+
+  create_table "metrics", force: :cascade do |t|
+    t.time "start_time", null: false
+    t.time "end_time", null: false
+    t.date "date", null: false
+    t.bigint "user_id", null: false
+    t.bigint "organization_id", null: false
+    t.virtual "duration", type: :interval, as: "(end_time - start_time)", stored: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["date"], name: "index_metrics_on_date"
+    t.index ["organization_id"], name: "index_metrics_on_organization_id"
+    t.index ["user_id", "organization_id", "date"], name: "idx_user_organization_date_uniq", unique: true
+    t.index ["user_id"], name: "index_metrics_on_user_id"
   end
 
   create_table "organizations", force: :cascade do |t|
@@ -73,4 +88,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_19_102606) do
   add_foreign_key "memberships", "organizations"
   add_foreign_key "memberships", "roles"
   add_foreign_key "memberships", "users"
+  add_foreign_key "metrics", "organizations"
+  add_foreign_key "metrics", "users"
 end

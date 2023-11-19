@@ -19,7 +19,7 @@ WorkHours is a web application designed to manage and visualize work metrics eff
 
 Ensure that the following versions are installed:
 
-PostgreSQL: Version 12 and above.
+PostgreSQL: Version 15 and above.
 Ruby: Version 3.2.2.
 Rails: Version 7.1.
 Additionally, refer to the specific versions mentioned in the `Gemfile.lock` for Ruby gems and package.json for JavaScript packages to ensure compatibility and a smooth development experience.

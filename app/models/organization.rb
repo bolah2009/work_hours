@@ -5,4 +5,5 @@ class Organization < ApplicationRecord
   has_many :memberships, dependent: :destroy
   has_many :users, through: :memberships
   has_many :invitations, dependent: :destroy
+  has_many :metrics, dependent: :restrict_with_error
 end

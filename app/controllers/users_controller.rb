@@ -1,10 +1,11 @@
 class UsersController < ApplicationController
   skip_before_action :require_login, only: %i[new create]
   before_action :require_current_user, only: %i[update edit]
-  before_action :set_user,
-                only: %i[edit update]
+  before_action :set_user, only: %i[edit update show]
   before_action :prevent_registrations, only: %i[new create]
   before_action :set_organization,
+                only: %i[show]
+  before_action :set_metrics,
                 only: %i[show]
 
   # GET /users/1
@@ -20,7 +21,7 @@ class UsersController < ApplicationController
     @user = current_user
   end
 
-  # POST /users
+  # POST /users or /users.json
   def create
     @user = User.new(user_params)
 
@@ -65,8 +66,18 @@ class UsersController < ApplicationController
   end
 
   def set_organization
-    @organization = Organization.find_by(id: session[:current_organization_id])
+    @organization = Organization.find_by(id: params[:organization_id])
     redirect_to root_path if @organization.blank?
+  end
+
+  def set_metrics
+    organization_id = params[:organization_id]
+
+    @metrics = if !current_user.admin?(organization_id) && !current_user.owner?(organization_id)
+                 Metric.user_metrics(organization_id:, user_id: current_user_id)
+               else
+                 Metric.user_metrics(organization_id:, user_id: params[:id])
+               end
   end
 
   # Only allow a list of trusted parameters through.
@@ -89,6 +100,6 @@ class UsersController < ApplicationController
   def require_current_user
     return if current_user_id == params[:id].to_i
 
-    redirect_to user_path current_user_id
+    redirect_to root_path
   end
 end

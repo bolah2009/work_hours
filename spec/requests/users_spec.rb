@@ -11,10 +11,15 @@ RSpec.describe '/users' do
   end
 
   let(:user) { create(:user) }
+  let(:organization) { create(:organization) }
+  let(:role) { create(:role, name: 'admin') }
 
   describe 'GET /show' do
     context 'with a logged in user', authenticated_as: :user do
-      before { get user_url(user) }
+      before do
+        user.memberships.create!(role:, organization:)
+        get organization_user_url(organization, user)
+      end
 
       it 'respond with a success status' do
         expect(response).to have_http_status(:success)
@@ -26,7 +31,7 @@ RSpec.describe '/users' do
     end
 
     context 'with a guest' do
-      before { get user_url(user) }
+      before { get organization_user_url(organization, user) }
 
       it_behaves_like 'an unauthorised user'
     end
@@ -87,24 +92,6 @@ RSpec.describe '/users' do
     end
   end
 
-  describe 'GET /edit' do
-    before { get user_url(user) }
-
-    context 'with a guest' do
-      it_behaves_like 'an unauthorised user'
-    end
-
-    context 'with a logged in user', authenticated_as: :user do
-      it 'renders a successful response' do
-        expect(response).to be_successful
-      end
-
-      it 'renders new account page' do
-        expect(response.body).to render_template 'users/show'
-      end
-    end
-  end
-
   describe 'PATCH /update' do
     before do
       patch user_url(user_param), params: { user: attributes }
@@ -136,7 +123,7 @@ RSpec.describe '/users' do
           end
 
           it 'redirects to user page' do
-            expect(response).to redirect_to user_url user
+            expect(response).to redirect_to root_url
           end
 
           it 'does not update the requested user' do

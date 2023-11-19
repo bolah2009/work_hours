@@ -7,7 +7,7 @@ RSpec.describe UsersController do
     end
 
     it 'routes to #show' do
-      expect(get: '/users/1').to route_to('users#show', id: '1')
+      expect(get: '/organizations/1/users/1').to route_to('users#show', organization_id: '1', id: '1')
     end
 
     it 'routes to #create' do
@@ -19,7 +19,7 @@ RSpec.describe UsersController do
     end
 
     it 'routes to #update via PATCH' do
-      expect(patch: '/users/1').to route_to('users#update', id: '1')
+      expect(patch: 'users/1').to route_to('users#update', id: '1')
     end
   end
 end

@@ -1,0 +1,65 @@
+<div class="bg-gray-50 dark:bg-slate-900 min-h-[100vh]">
+  <!-- ========== MAIN CONTENT ========== -->
+  <%= render partial: 'shared/sidebar' %>
+  <!-- Content -->
+  <div class="w-full pt-10 px-4 sm:px-6 md:px-8 lg:pl-72">
+    <!-- Page Heading -->
+    <header>
+      <h1 class="block text-2xl font-bold text-gray-800 sm:text-3xl dark:text-white">WorkHours Organization: <%= @organization.name %> </h1>
+    </header>
+    <!-- End Page Heading -->
+        <%= form_with(model: Metric.new, url: new_organization_user_metric_url(@organization, @current_user) , class: "flex flex-col mt-8") do |form| %>
+          <div class="flex rounded-lg shadow-sm mb-4">
+            <%= form.label :start_time, 'Work Start Time', class: "cursor-pointer px-4 inline-flex items-center min-w-fit rounded-s-md border border-e-0 border-gray-200 bg-gray-50 text-sm text-gray-500 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400" %>
+            <%= form.time_field :start_time, class: "py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-e-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600", required: true %>
+          </div>
+
+          <div class="flex rounded-lg shadow-sm mb-4">
+            <%= form.label :end_time, 'Work Close Time', class: "cursor-pointer px-4 inline-flex items-center min-w-fit rounded-s-md border border-e-0 border-gray-200 bg-gray-50 text-sm text-gray-500 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-400" %>
+            <%= form.time_field :end_time, autocomplete: 'new-password', placeholder: "HH:MM AM/PM", class: "py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm rounded-e-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600", required: true %>
+          </div>
+
+          <div>
+            <%= form.submit 'Submit Work Hours', class: "cursor-pointer py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none dark:bg-white/10 dark:hover:bg-white/20 dark:text-white dark:hover:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" %>
+          </div>
+        <% end %>
+
+<div class="flex flex-col border rounded-lg divide-y divide-gray-200 dark:border-gray-700 dark:divide-gray-700 mt-16 p-8  bg-white dark:divide-gray-700 dark:bg-slate-800">
+<div class="-m-1.5 overflow-auto">
+  <div class="p-1.5 min-w-full inline-block align-middle">
+    <div class="overflow-hidden">
+      <div class="table border-collapse table-auto w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <div class="table-header-group">
+          <div class="table-row">
+            <div class="table-cell px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Name</div>
+            <div class="table-cell px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Ave. Start Time</div>
+            <div class="table-cell px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Ave. Close Time</div>
+            <div class="table-cell px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Ave. Work Time</div>
+            <div class="table-cell px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Total Work Time</div>
+            <div class="table-cell px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase">Action</div>
+          </div>
+        </div>
+        <div class="table-row-group divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-slate-800">
+          <% @metrics.each do |metric| %>
+              <%= link_to organization_user_path(@organization_id, metric.user_id), class: "table-row odd:bg-white even:bg-gray-100 hover:bg-gray-100 dark:odd:bg-gray-800 dark:even:bg-gray-700 dark:hover:bg-gray-900" do %>
+            <div class="table-cell px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200"><%= metric.user_name %></div>
+            <div class="table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><%= metric.average_start_time.strftime "%I:%M%p" %></div>
+            <div class="table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><%= metric.average_end_time.strftime "%I:%M%p" %></div>
+            <div class="table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><%= metric.average_duration.inspect %></div>
+            <div class="table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><%= metric.total_duration.inspect %></div>
+            <div class="table-cell px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
+              <button type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none dark:text-blue-500 dark:hover:text-blue-400 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">View User</button>
+            </div>
+               <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  </div>
+  </div>
+  <!-- End Content -->
+  <!-- ========== END MAIN CONTENT ========== -->
+</div>
+<%= render partial: 'shared/notice' %>

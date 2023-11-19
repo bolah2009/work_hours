@@ -15,7 +15,7 @@ RSpec.describe 'Organizations' do
   let(:role) { create(:role, name: 'owner') }
 
   before do
-    role.memberships.create(role:, organization:)
+    user.memberships.create(role:, organization:)
   end
 
   describe 'GET /show' do
@@ -23,7 +23,6 @@ RSpec.describe 'Organizations' do
       before { get organization_url(organization) }
 
       it 'respond with a success status' do
-        # debugger
         expect(response).to have_http_status(:success)
       end
 

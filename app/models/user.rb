@@ -10,6 +10,7 @@ class User < ApplicationRecord
                               inverse_of: :sender
   has_many :received_invitations, class_name: 'Invitation', foreign_key: 'recipient_id', dependent: :destroy,
                                   inverse_of: :recipient
+  has_many :metrics, dependent: :restrict_with_error
 
   def admin?(organization_id)
     role_exists?('admin', organization_id)

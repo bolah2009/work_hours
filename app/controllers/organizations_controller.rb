@@ -1,14 +1,13 @@
 class OrganizationsController < ApplicationController
-  before_action :set_organizations, only: %i[show index]
+  before_action :_organizations, only: %i[show index]
 
   def index; end
 
   def show
-    # debugger
     @organization = @organizations.find(params[:id])
 
     @organization_id = @organization.id
-    session[:current_organization_id] = @organization_id
+    @metrics = user_aggregated_metrics
   end
 
   def new; end
@@ -38,8 +37,19 @@ class OrganizationsController < ApplicationController
 
   private
 
-  def set_organizations
+  def _organizations
     @organizations ||= current_user.organizations
+  end
+
+  def user_aggregated_metrics
+    condition = [organization_id: @organization_id]
+
+    # scope data to only specific user when user is only a member
+    if !current_user.admin?(@organization_id) || !current_user.owner?(@organization_id)
+      condition.push(user_id: current_user_id)
+    end
+
+    Metric.user_aggregated_metrics(*condition)
   end
 
   def organization_params
