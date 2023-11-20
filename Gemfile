@@ -55,7 +55,6 @@ group :development, :test do
 
   # test frameworks
   gem 'factory_bot_rails'
-  gem 'faker'
   gem 'rails-controller-testing'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
@@ -77,3 +76,10 @@ group :test do
   gem 'simplecov-cobertura', require: false
   gem 'simplecov-console', require: false
 end
+
+gem 'dockerfile-rails', group: :development
+
+gem 'sentry-ruby'
+
+gem 'faker', require: false
+gem 'sentry-rails'

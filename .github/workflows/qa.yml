@@ -74,7 +74,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
         env:
-          POSTGRES_PASSWORD: postgres        
+          POSTGRES_PASSWORD: postgres
         ports:
           # Maps tcp port 5432 on service container to the host
           - 5432:5432
@@ -94,7 +94,7 @@ jobs:
           POSTGRES_PASSWORD: postgres
           RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           RAILS_ENV: test
-          DATABASE_URL: 'postgres://postgres@localhost:5432/migra_test'
+          DATABASE_URL: 'postgres://postgres:postgres@localhost:5432/migra_test'
         run: |
           bundle install
           RAILS_ENV=test bundle exec rails db:create

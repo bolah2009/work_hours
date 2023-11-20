@@ -117,6 +117,8 @@ GEM
       reline (>= 0.3.1)
     diff-lcs (1.5.0)
     docile (1.4.0)
+    dockerfile-rails (1.5.12)
+      rails (>= 3.0.0)
     drb (2.2.0)
       ruby2_keywords
     erb_lint (0.5.0)
@@ -297,6 +299,11 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    sentry-rails (5.13.0)
+      railties (>= 5.0)
+      sentry-ruby (~> 5.13.0)
+    sentry-ruby (5.13.0)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
     shoulda-matchers (5.3.0)
       activesupport (>= 5.2.0)
     simplecov (0.22.0)
@@ -379,6 +386,7 @@ DEPENDENCIES
   bundle-audit
   capybara
   debug
+  dockerfile-rails
   erb_lint
   factory_bot_rails
   faker
@@ -395,6 +403,8 @@ DEPENDENCIES
   rubocop-rails
   rubocop-rspec
   selenium-webdriver
+  sentry-rails
+  sentry-ruby
   shoulda-matchers
   simplecov
   simplecov-cobertura

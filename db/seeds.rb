@@ -1,3 +1,5 @@
+require 'faker'
+
 # Load seeds for roles
 load Rails.root.join('db/seeds/roles.rb')
 
