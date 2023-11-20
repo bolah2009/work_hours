@@ -71,7 +71,7 @@ Or, start the server with TailwindCSS using:
 
 ### Live Link
 
-- [Web App Live Link](https://work_hours.bolabuari.com)
+- [Web App Live Link](https://work-hours-factorial.fly.dev/)
 
 ## Validation, associations and assumptions for the Coding Challenge
 
