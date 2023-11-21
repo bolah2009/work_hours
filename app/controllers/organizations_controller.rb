@@ -7,6 +7,7 @@ class OrganizationsController < ApplicationController
     @organization = @organizations.find(params[:id])
 
     @organization_id = @organization.id
+    @users = @organization.users.distinct
     @metrics = user_aggregated_metrics
   end
 
@@ -20,19 +21,12 @@ class OrganizationsController < ApplicationController
       organization_member = current_user.memberships.create(role: owner_role, organization:) # TODO: Move to model?
 
       if organization_member.save
-        render :index
-      else
-        redirect_to organizations_path, assigns: {
-                                          notice: organization_member.errors.first.full_message,
-                                          notice_type: :error
-                                        },
-                                        status: :unprocessable_entity
+        set_flash(notice: 'Organization successfully created!', notice_type: :success)
+        return render :index
       end
-    else
-      @notice = organization.errors.first.full_message
-      @notice_type = :error
-      render :index, status: :unprocessable_entity
     end
+    set_flash(notice: organization.errors.first.full_message, notice_type: :error)
+    render :index, status: :unprocessable_entity
   end
 
   private

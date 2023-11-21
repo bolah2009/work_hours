@@ -20,7 +20,7 @@ Rails.application.routes.draw do
       resources :metrics, only: %i[new create]
     end
   end
-  resources 'users', only: %i[new create update edit]
+  resources 'users', only: %i[new create edit]
 
   # Defines the root path route ("/")
   root 'organizations#index'

@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>WorkHours</title>
+    <% if content_for?(:title) %>
+      <%= yield :title %>
+    <% else %> 
+      <title>WorkHours</title>
+    <% end %>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -10,6 +14,23 @@
   </head>
 
   <body class="dark">
-      <%= yield %>
-  </body>
+    <div class="bg-gray-50 dark:bg-slate-900 min-h-[100vh]">
+  <%= render partial: 'shared/sidebar', assign: { organization: "WorkHours"} %>
+  <div class="w-full pt-10 px-4 sm:px-6 md:px-8 lg:pl-72">
+    <header>
+      <h1 class="block text-2xl font-bold text-gray-800 sm:text-3xl dark:text-white">
+        <% if content_for?(:heading) %>
+          <%= yield :heading %>
+        <% else %> 
+          WorkHours Organization
+        <% end %>
+      </h1>
+    </header>
+    <main>
+     <%= yield %>
+    </main>
+  </div>
+</div>
+<%= render partial: 'shared/notice' %>
+</body>
 </html>

@@ -7,4 +7,10 @@ RSpec.describe Organization do
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_uniqueness_of(:name) }
   end
+
+  context 'with associations' do
+    it { is_expected.to have_many(:users).through(:memberships).inverse_of(:organizations) }
+    it { is_expected.to have_many(:memberships).dependent(:destroy) }
+    it { is_expected.to have_many(:invitations).dependent(:destroy) }
+  end
 end

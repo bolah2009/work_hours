@@ -1,120 +1,114 @@
-<div class="bg-gray-50 dark:bg-slate-900 min-h-[100vh]">
-  <!-- ========== MAIN CONTENT ========== -->
-  <%= render partial: 'shared/sidebar' %>
-  <!-- Content -->
-  <div class="w-full pt-10 px-4 sm:px-6 md:px-8 lg:pl-72">
-    <!-- Page Heading -->
-    <header>
-      <h1 class="block text-2xl font-bold text-gray-800 sm:text-3xl dark:text-white">WorkHours Organization: <%= @organization&.name || 'Choose an Organization' %> </h1>
-      <h2 class="block text-xl font-bold text-gray-700 sm:text-2xl dark:text-gray-300 mt-8"><%= @user.name %> WorkHours Timeline</h2>
-    </header>
+<% content_for :title do %>
+   <title><%= @organization.name %> WorkHours for <%= @user.name %></title>
+<% end %>
 
-    <!-- End Page Heading -->
-    <% if @metrics.present? %>
-      <!-- Timeline -->
-      <div class="mt-8">
-        <% @metrics.each do |metric_group| %>
-          <!-- Heading -->
-          <div class="ps-2 my-2 first:mt-0">
-            <h3 class="my-4 text-sm font-medium uppercase text-gray-700 dark:text-gray-200">
-            <%= metric_group.first.strftime "%-d %^b, %Y" %>
-            </h3>
-          </div>
-          <!-- End Heading -->
-          <% metric_group.second.each do |metric| %>
-            <!-- 'Start Time' Item -->
-            <div class="flex gap-x-3">
-              <!-- Left Content -->
-              <div class="w-16 text-end">
-                <span class="text-xs text-gray-500 dark:text-gray-400"><%= metric.start_time.strftime "%I:%M%p" %></span>
-              </div>
-              <!-- End Left Content -->
-              <!-- Icon -->
-              <div class="relative last:after:hidden after:absolute after:top-7 after:bottom-0 after:start-3.5 after:w-px after:-translate-x-[0.5px] after:bg-gray-200 dark:after:bg-gray-700">
-                  <%= render 'shared/clock_9_icon' %>
-              </div>
-              <!-- End Icon -->
+<% content_for :heading do %>
+  <%= @user.name %> WorkHours Timeline
+<% end %>
 
-              <!-- Right Content -->
-              <div class="grow pt-0.5 pb-8">
-                <h3 class="flex gap-x-1.5 font-semibold text-gray-800 dark:text-white">
-                  Work start time
-                </h3>
-                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                  Started work <%= start_time_interval(metric.start_time.strftime "%H:%M") %> starting time (9:00 AM).
-                </p>
-                <button type="button" class="mt-1 -ms-1 p-1 inline-flex items-center gap-x-2 text-xs rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                  <%= render partial: 'shared/profile_icon', locals: {initials: metric.user_name.first } %>
-                  <%= metric.user_name %>
-                </button>
-              </div>
-              <!-- End Right Content -->
-            </div>
-            <!-- End 'Start Time' Item -->
-
-            <!-- 'End Time' Item -->
-            <div class="flex gap-x-3">
-              <!-- Left Content -->
-              <div class="w-16 text-end">
-                <span class="text-xs text-gray-500 dark:text-gray-400"><%= metric.end_time.strftime "%I:%M%p" %></span>
-              </div>
-              <!-- End Left Content -->
-              <!-- Icon -->
-              <div class="relative last:after:hidden after:absolute after:top-7 after:bottom-0 after:start-3.5 after:w-px after:-translate-x-[0.5px] after:bg-gray-200 dark:after:bg-gray-700">
-                <%= render 'shared/clock_5_icon' %>
-              </div>
-              <!-- End Icon -->
-
-              <!-- Right Content -->
-              <div class="grow pt-0.5 pb-8">
-                <h3 class="flex gap-x-1.5 font-semibold text-gray-800 dark:text-white">
-                  Work close time
-                </h3>
-                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                  Closed for work <%= end_time_interval(metric.end_time.strftime "%H:%M") %> closing time (5:00 PM).
-                </p>
-                <button type="button" class="mt-1 -ms-1 p-1 inline-flex items-center gap-x-2 text-xs rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                  <%= render partial: 'shared/profile_icon', locals: {initials: metric.user_name.first } %>
-                  <%= metric.user_name %>
-                </button>
-              </div>
-              <!-- End Right Content -->
-            </div>
-            <!-- End 'End Time' Item -->
-
-            <!-- 'Duration' Item -->
-            <div class="flex gap-x-3">
-              <!-- Left Content -->
-              <div class="w-16 text-end">
-                 <span class="text-xs text-gray-500 dark:text-gray-400"><%= metric.duration.parts[:hours] %> hours</span>
-              </div>
-              <!-- End Left Content -->
-              <!-- Icon -->
-              <div class="relative last:after:hidden after:absolute after:top-7 after:bottom-0 after:start-3.5 after:w-px after:-translate-x-[0.5px] after:bg-gray-200 dark:after:bg-gray-700">
-                <div class="relative z-10 w-7 h-7 flex justify-center items-center">
-                <%= render 'shared/hourglass_icon' %>
-                </div>
-              </div>
-              <!-- End Icon -->
-              <!-- Right Content -->
-              <div class="grow pt-0.5 pb-8">
-                <h3 class="flex gap-x-1.5 font-semibold text-gray-800 dark:text-white">
-                  Total work time
-                </h3>
-                <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                  Total work time for <%= metric_group.first.strftime "%A, %-d %^b" %> is <%= metric.duration.inspect %>.
-                </p>
-                <button type="button" class="mt-1 -ms-1 p-1 inline-flex items-center gap-x-2 text-xs rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                  <%= render partial: 'shared/profile_icon', locals: {initials: metric.user_name.first } %>
-                  <%= metric.user_name %>
-                </button>
-              </div>
-              <!-- End Right Content -->
-            </div>
-            <!-- End 'Duration' Item -->
-          <% end %>
-        <% end %>
+<% if @metrics.present? %>
+  <!-- Timeline -->
+  <div class="mt-8">
+    <% @metrics.each do |metric_group| %>
+      <!-- Heading -->
+      <div class="ps-2 my-2 first:mt-0">
+        <h3 class="my-4 text-sm font-medium uppercase text-gray-700 dark:text-gray-200">
+        <%= metric_group.first.strftime "%-d %^b, %Y" %>
+        </h3>
       </div>
+      <!-- End Heading -->
+      <% metric_group.second.each do |metric| %>
+        <!-- 'Start Time' Item -->
+        <div class="flex gap-x-3">
+          <!-- Left Content -->
+          <div class="w-16 text-end">
+            <span class="text-xs text-gray-500 dark:text-gray-400"><%= metric.start_time.strftime "%I:%M%p" %></span>
+          </div>
+          <!-- End Left Content -->
+          <!-- Icon -->
+          <div class="relative last:after:hidden after:absolute after:top-7 after:bottom-0 after:start-3.5 after:w-px after:-translate-x-[0.5px] after:bg-gray-200 dark:after:bg-gray-700">
+              <%= render 'shared/clock_9_icon' %>
+          </div>
+          <!-- End Icon -->
+
+          <!-- Right Content -->
+          <div class="grow pt-0.5 pb-8">
+            <h3 class="flex gap-x-1.5 font-semibold text-gray-800 dark:text-white">
+              Work start time
+            </h3>
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+              Started work <%= start_time_interval(metric.start_time.strftime "%H:%M") %> starting time (9:00 AM).
+            </p>
+            <button type="button" class="mt-1 -ms-1 p-1 inline-flex items-center gap-x-2 text-xs rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+              <%= render partial: 'shared/profile_icon', locals: {initials: metric.user_name.first } %>
+              <%= metric.user_name %>
+            </button>
+          </div>
+          <!-- End Right Content -->
+        </div>
+        <!-- End 'Start Time' Item -->
+
+        <!-- 'End Time' Item -->
+        <div class="flex gap-x-3">
+          <!-- Left Content -->
+          <div class="w-16 text-end">
+            <span class="text-xs text-gray-500 dark:text-gray-400"><%= metric.end_time.strftime "%I:%M%p" %></span>
+          </div>
+          <!-- End Left Content -->
+          <!-- Icon -->
+          <div class="relative last:after:hidden after:absolute after:top-7 after:bottom-0 after:start-3.5 after:w-px after:-translate-x-[0.5px] after:bg-gray-200 dark:after:bg-gray-700">
+            <%= render 'shared/clock_5_icon' %>
+          </div>
+          <!-- End Icon -->
+
+          <!-- Right Content -->
+          <div class="grow pt-0.5 pb-8">
+            <h3 class="flex gap-x-1.5 font-semibold text-gray-800 dark:text-white">
+              Work close time
+            </h3>
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+              Closed for work <%= end_time_interval(metric.end_time.strftime "%H:%M") %> closing time (5:00 PM).
+            </p>
+            <button type="button" class="mt-1 -ms-1 p-1 inline-flex items-center gap-x-2 text-xs rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+              <%= render partial: 'shared/profile_icon', locals: {initials: metric.user_name.first } %>
+              <%= metric.user_name %>
+            </button>
+          </div>
+          <!-- End Right Content -->
+        </div>
+        <!-- End 'End Time' Item -->
+
+        <!-- 'Duration' Item -->
+        <div class="flex gap-x-3">
+          <!-- Left Content -->
+          <div class="w-16 text-end">
+              <span class="text-xs text-gray-500 dark:text-gray-400"><%= metric.duration.parts[:hours] %> hours</span>
+          </div>
+          <!-- End Left Content -->
+          <!-- Icon -->
+          <div class="relative last:after:hidden after:absolute after:top-7 after:bottom-0 after:start-3.5 after:w-px after:-translate-x-[0.5px] after:bg-gray-200 dark:after:bg-gray-700">
+            <div class="relative z-10 w-7 h-7 flex justify-center items-center">
+            <%= render 'shared/hourglass_icon' %>
+            </div>
+          </div>
+          <!-- End Icon -->
+          <!-- Right Content -->
+          <div class="grow pt-0.5 pb-8">
+            <h3 class="flex gap-x-1.5 font-semibold text-gray-800 dark:text-white">
+              Total work time
+            </h3>
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+              Total work time for <%= metric_group.first.strftime "%A, %-d %^b" %> is <%= metric.duration.inspect %>.
+            </p>
+            <button type="button" class="mt-1 -ms-1 p-1 inline-flex items-center gap-x-2 text-xs rounded-lg border border-transparent text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+              <%= render partial: 'shared/profile_icon', locals: {initials: metric.user_name.first } %>
+              <%= metric.user_name %>
+            </button>
+          </div>
+          <!-- End Right Content -->
+        </div>
+        <!-- End 'Duration' Item -->
+      <% end %>
     <% end %>
   </div>
-</div>
+<% end %>

@@ -9,11 +9,8 @@ class MetricsController < ApplicationController
     if @metric.save
       redirect_back fallback_location: root_path, notice: 'Metric was successfully created.'
     else
-      redirect_to organization_path(@organization_id), assigns: {
-                                                         notice: @metric.errors.first.full_message,
-                                                         notice_type: :error
-                                                       },
-                                                       status: :unprocessable_entity
+      set_flash(notice: @metric.errors.first.full_message, notice_type: :error)
+      redirect_to organization_path(@organization_id)
     end
   end
 

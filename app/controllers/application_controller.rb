@@ -1,14 +1,11 @@
 class ApplicationController < ActionController::Base
-  add_flash_types :notice_type, :show_frame
+  add_flash_types :notice_type
 
   before_action :current_user
   before_action :require_login
 
   before_action :set_current_user_organizations
   before_action :set_organization_users
-
-  rescue_from ActiveRecord::RecordNotFound, with: :not_found
-  rescue_from ActiveRecord::RecordInvalid, with: :invalid
 
   def current_user
     return if session[:current_user_id].blank?
@@ -56,15 +53,12 @@ class ApplicationController < ActionController::Base
     current_user.admin?(current_organization_id) || current_user.owner?(current_organization_id)
   end
 
-  def not_found(error)
-    redirect_to root_path, assigns: { notice: error.message, notice_type: :error }, status: :not_found
-  end
-
-  def invalid(error)
-    redirect_to root_path, assigns: { notice: error.message, notice_type: :error }, status: :unprocessable_entity
-  end
-
   def organization_id
     params[:organization_id]
+  end
+
+  def set_flash(notice: nil, notice_type: nil)
+    flash.now[:notice] = notice if notice
+    flash.now[:notice_type] = notice_type if notice_type
   end
 end

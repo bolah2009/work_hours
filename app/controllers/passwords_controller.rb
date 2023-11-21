@@ -1,26 +1,11 @@
 class PasswordsController < ApplicationController
   def update
     if current_user.authenticate(password_params[:old_password]) && current_user.update(update_password_params)
-      notice = 'Password changed successfully!'
-      notice_type = :success
+      set_flash(notice: 'Password changed successfully!', notice_type: :success)
     else
-      notice = 'Unable to change password'
-      notice_type = :error
+      set_flash(notice: 'Unable to change password', notice_type: :error)
     end
-
-    respond_to do |format|
-      format.turbo_stream do
-        render turbo_stream: turbo_stream.replace(
-          :user_password_notice,
-          partial: 'shared/form_notice',
-          assigns: { type: :user_password, errors: current_user.errors, notice:, notice_type: }
-        )
-      end
-      format.html do
-        redirect_to organization_user_path(organization_id, current_user), errors: current_user.errors, notice:,
-                                                                           notice_type:
-      end
-    end
+    redirect_to organization_user_path(organization_id, current_user), errors: current_user.errors
   end
 
   private

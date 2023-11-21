@@ -9,25 +9,30 @@ class SessionsController < ApplicationController
 
   def create
     user = User.find_by(email: params[:email])
-
     if user.present? && user.authenticate(params[:password])
       session[:current_user_id] = user.id
+      @show_frame = nil
       redirect_to root_path
     else
+      set_flash(notice: 'invalid email or password', notice_type: :error)
       render :new, status: :unprocessable_entity,
-                   assigns: { notice: 'invalid email or password', notice_type: :error, show_frame: :sign_in }
+                   assigns: { show_frame: :sign_in }
     end
   end
 
   def destroy
     session.delete(:current_user_id)
     @current_user = nil
-    redirect_to sign_in_path, notice: 'Logged out', notice_type: :info, status: :see_other
+    set_flash(notice: 'Logged out', notice_type: :info)
+    redirect_to sign_in_path, status: :see_other
   end
 
   private
 
   def authenticate
-    redirect_to root_path, notice: 'You are already logged in', notice_type: :info if session[:current_user_id]
+    return unless session[:current_user_id]
+
+    set_flash(notice: 'You are already logged in', notice_type: :info)
+    redirect_to root_path
   end
 end
