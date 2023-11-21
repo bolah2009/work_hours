@@ -19,7 +19,7 @@
     </ol>
   </div>
 </div>
-<div id="application-sidebar" class="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform hidden fixed top-0 left-0 bottom-0 z-[60] w-64 bg-white border-r border-gray-200 pt-7 pb-10 overflow-y-auto scrollbar-y lg:block lg:translate-x-0 lg:right-auto lg:bottom-0 dark:scrollbar-y dark:bg-gray-800 dark:border-gray-700">
+<div id="application-sidebar" class="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform hidden fixed top-0 left-0 bottom-0 z-[60] w-64 bg-white border-r border-gray-200 pt-7 pb-10 overflow-y-auto scrollbar-y lg:flex flex-col lg:translate-x-0 lg:right-auto lg:bottom-0 dark:scrollbar-y dark:bg-gray-800 dark:border-gray-700 min-h-screen">
   <div class="px-6">
     <a class="flex-none text-xl font-semibold dark:text-white" href="<%= (@organization&.id && organization_url(@organization)) || '/#' %>" aria-label="<%= @organization&.name || 'WorkHours' %>"><%= @organization&.name || 'WorkHours' %></a>
   </div>
@@ -98,7 +98,8 @@
       </li>
     </ul>
   </nav>
-  <div class="mb-8 fixed bottom-0 w-full flex items-center justify-center">
+
+  <div class="self-end mt-8 w-full flex items-center justify-center">
     <%= link_to 'Logout', logout_path, class: "py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200 disabled:opacity-50 disabled:pointer-events-none dark:bg-white/10 dark:hover:bg-white/20 dark:text-white dark:hover:text-white dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600 w-3/4" %>
   </div>
 </div>
